@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>流量管理 on Apache Dubbo</title><link>https://cn.dubbo.apache.org/zh-cn/overview/reference/pixiu/tasks/traffic/</link><description>Recent content in 流量管理 on Apache Dubbo</description><generator>Hugo</generator><language>zh-cn</language><atom:link href="https://cn.dubbo.apache.org/zh-cn/overview/reference/pixiu/tasks/traffic/index.xml" rel="self" type="application/rss+xml"/><item><title>HTTP</title><link>https://cn.dubbo.apache.org/zh-cn/overview/reference/pixiu/tasks/traffic/httpproxy/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cn.dubbo.apache.org/zh-cn/overview/reference/pixiu/tasks/traffic/httpproxy/</guid><description>&lt;p&gt;本示例演示了如何使用 Pixiu Gateway 作为 HTTP 代理网关，接收外部的 HTTP 请求并转发到后端的 Dubbo-go RPC 服务。示例基于 &lt;code&gt;dubbo-go-samples/helloworld&lt;/code&gt; 中的 RPC 服务。&lt;/p&gt;
+&lt;h2 id="先决条件"&gt;先决条件&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;已安装 &lt;a href="https://cn.dubbo.apache.org/zh-cn/overview/reference/pixiu/install/"&gt;Pixiu Gateway&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="创建-rpc-服务"&gt;创建 RPC 服务&lt;/h2&gt;
+&lt;h3 id="创建服务"&gt;创建服务&lt;/h3&gt;
+&lt;p&gt;首先创建 helloworld 服务：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl apply -f https://raw.githubusercontent.com/apache/dubbo-go-pixiu-samples/main/gateway/helloworld/deployment.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="验证服务"&gt;验证服务&lt;/h3&gt;
+&lt;p&gt;检查服务是否正常运行：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl get pods -n helloworld
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl get svc -n helloworld
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="创建-http-代理"&gt;创建 HTTP 代理&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl apply -f https://raw.githubusercontent.com/apache/dubbo-go-pixiu-samples/main/gateway/http/http.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="验证-http-代理"&gt;验证 HTTP 代理&lt;/h3&gt;
+&lt;p&gt;检查所有资源的状态：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl get httproute -n default
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl get pixiuclusterpolicy -n default
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl get pixiufilterpolicy -n default
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl get gateway -n default
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id="验证"&gt;验证&lt;/h2&gt;
+&lt;h3 id="获取网关地址"&gt;获取网关地址&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;NAME TYPE CLUSTER-IP EXTERNAL-IP PORT&lt;span style="color:#719e07"&gt;(&lt;/span&gt;S&lt;span style="color:#719e07"&gt;)&lt;/span&gt; AGE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;pixiu-3465d618 LoadBalancer 10.108.197.9 &amp;lt;pending&amp;gt; 80:32547/TCP 86m
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;pixiu-gateway ClusterIP 10.105.156.54 &amp;lt;none&amp;gt; 8080/TCP,8081/TCP 86m
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="发送-http-请求"&gt;发送 HTTP 请求&lt;/h3&gt;
+&lt;p&gt;使用 curl 发送 HTTP 请求到 RPC 服务：&lt;/p&gt;</description></item></channel></rss>
